@@ -1,0 +1,106 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h2 style="text-align:center; margin-bottom:20px;">📚 Available Courses</h2>
+
+<div style="display: flex; flex-wrap: wrap; gap: 20px; justify-content: center;">
+    {% for item in courses_with_count %}
+    <div class="course-card">
+        
+        {% if item.course.image %}
+        <img src="{{ item.course.image.url }}" alt="{{ item.course.title }}" class="course-img">
+        {% endif %}
+
+        <h3 class="course-title">{{ item.course.title }}</h3>
+
+        <!-- 🔹 Feedback count badge -->
+        <span class="feedback-badge">
+            {{ item.feedback_count }} feedback{{ item.feedback_count|pluralize }}
+        </span>
+
+        <p class="course-desc">{{ item.course.description|truncatewords:20 }}</p>
+        <small>🗓 {{ item.course.start_date }} - {{ item.course.end_date }}</small>
+        
+        <!-- 🔹 View button -->
+        <div style="margin-top: 15px;">
+            <a href="{% url 'course_detail' item.course.id %}" class="view-btn">
+               View
+            </a>
+        </div>
+    </div>
+    {% empty %}
+    <p>No courses available right now. 🚀</p>
+    {% endfor %}
+</div>
+
+<!-- 🔹 CSS for modern card -->
+<style>
+.course-card {
+    border: 1px solid #ddd; 
+    border-radius: 12px; 
+    width: 300px; 
+    padding: 10px; 
+    text-align: center; 
+    position: relative;
+    transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.course-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 12px 25px rgba(0,0,0,0.2);
+}
+
+.course-img {
+    width:100%;
+    height:200px;
+    object-fit:cover;
+    border-radius:8px;
+}
+
+.course-title {
+    margin:10px 0;
+    font-size: 1.2em;
+    font-weight: bold;
+}
+
+.course-desc {
+    margin:10px 0;
+    color:#555;
+    font-size:0.95em;
+}
+
+.feedback-badge {
+    position:absolute; 
+    top:10px; 
+    right:10px; 
+    background:#28a745; 
+    color:white; 
+    padding:5px 12px; 
+    border-radius:20px; 
+    font-size:0.9em;
+    font-weight:bold;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+    transition: transform 0.3s;
+}
+
+.course-card:hover .feedback-badge {
+    transform: scale(1.1);
+}
+
+.view-btn {
+    text-decoration:none; 
+    color:white; 
+    background:#007bff; 
+    padding:8px 16px; 
+    border-radius:5px; 
+    display:inline-block;
+    transition: background 0.3s, transform 0.3s;
+}
+
+.view-btn:hover {
+    background:#0056b3;
+    transform: translateY(-2px);
+}
+</style>
+
+{% endblock %}

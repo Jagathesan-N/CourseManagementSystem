@@ -1,0 +1,52 @@
+{% extends 'base.html' %}
+{% block content %}
+<div style="max-width:800px; margin:auto; padding:20px; border:1px solid #ddd; border-radius:10px;">
+
+    <!-- Course Image -->
+    {% if course.image %}
+        <img src="{{ course.image.url }}" alt="{{ course.title }}"
+             style="width:100%; height:400px; object-fit:cover; border-radius:8px;">
+    {% endif %}
+
+    <!-- Course Title and Description -->
+    <h2 style="margin-top:20px;">{{ course.title }}</h2>
+    <p>{{ course.description }}</p>
+
+    <!-- Course Dates -->
+    <p>
+        <strong>🗓 Start Date:</strong> {{ course.start_date }} <br>
+        <strong>🏁 End Date:</strong> {{ course.end_date }}
+    </p>
+
+    <!-- Feedback Form -->
+    <h3 style="margin-top:30px;">💬 Leave Feedback</h3>
+    <form method="post" style="margin-top:10px;">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit" style="padding:10px 15px; background:#28a745; color:white; border:none; border-radius:5px;">
+            Submit Feedback
+        </button>
+    </form>
+
+    <!-- Previous Feedbacks -->
+    <h3 style="margin-top:30px;">📝 Previous Feedbacks</h3>
+    {% if feedbacks %}
+        <ul style="list-style:none; padding:0;">
+        {% for fb in feedbacks %}
+            <li style="background:#f9f9f9; margin:10px 0; padding:10px; border-radius:5px;">
+                <strong>{{ fb.name }}</strong> ({{ fb.created_at|date:"M d, Y H:i" }})<br>
+                {{ fb.message }}
+            </li>
+        {% endfor %}
+        </ul>
+    {% else %}
+        <p>No feedback yet. Be the first!</p>
+    {% endif %}
+
+    <!-- Back Link -->
+    <a href="{% url 'course_list' %}" 
+       style="display:inline-block; margin-top:20px; padding:10px 15px; background:#007bff; color:#fff; border-radius:5px; text-decoration:none;">
+        ⬅ Back to Courses
+    </a>
+</div>
+{% endblock %}
